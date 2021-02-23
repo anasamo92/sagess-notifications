@@ -1,6 +1,6 @@
 {
     "name": "sagess-notifications",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Notification Center extension for Sagess",
     "main": "index.js",
     "scripts": {
