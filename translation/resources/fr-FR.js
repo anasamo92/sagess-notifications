@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
-    focus: {
+    sagess: {
         notifications: {
             nothing: 'Aucune notification',
             title: 'Notifications',
