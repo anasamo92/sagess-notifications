@@ -1,5 +1,5 @@
 export default {
-    focus: {
+    sagess: {
         notifications: {
             nothing: 'Aucune notification',
             title: 'Notifications',

@@ -14,7 +14,7 @@ function _isYoungerThanA(periodName, date) {
 
 // function to group date
 function groupDate({creationDate: date}) {
-    const root = 'focus.notifications.groups';
+    const root = 'sagess.notifications.groups';
     if(_isYoungerThanA('day', date)) {
         return `${root}.0_today`;
     }

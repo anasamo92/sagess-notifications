@@ -49,7 +49,7 @@ class NotificationCenterPanel extends PureComponent {
                 <div data-focus='notification-center-panel' className='bounce-in-right' data-fetching={isFetching} style={{ zIndex: 2 }}>
                     <header>
                         <button className='mdl-button mdl-button--icon' data-focus='notification-center-close' onClick={this._onClosePanel}><i className='material-icons'>{'clear'}</i></button>
-                        <h1 onClick={onTitleClick}>{translateText('focus.notifications.title')}</h1>
+                        <h1 onClick={onTitleClick}>{translateText('sagess.notifications.title')}</h1>
                         {panelHeader && panelHeader}
                     </header>
                     {hasAddNotif && <NotificationAdd onAddClick={onAddClick} />}
@@ -63,7 +63,7 @@ class NotificationCenterPanel extends PureComponent {
                         />
                     }
                     {!hasNotifications &&
-                        <div className='no-notification'>{translate('focus.notifications.nothing')}</div>
+                        <div className='no-notification'>{translate('sagess.notifications.nothing')}</div>
                     }
                     {panelFooter && <footer>{panelFooter}</footer>}
                 </div>
