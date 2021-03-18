@@ -61,11 +61,5 @@ ul[data-focus='notification-receiver']{
                 display: inline-flex;
             }
         }
-        //On hover on the line, the date is hidden and the button is visible.
-        // &:hover {
-        //     div[data-focus='notification-received']{
-        //         background-color: $notification-hover-color
-        //     }
-        // }
     }
 }

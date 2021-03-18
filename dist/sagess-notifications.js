@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["React", "moment", "ReactDOM"], factory);
 	else if(typeof exports === 'object')
-		exports["focus-notifications"] = factory(require("React"), require("moment"), require("ReactDOM"));
+		exports["sagess-notifications"] = factory(require("React"), require("moment"), require("ReactDOM"));
 	else
-		root["focus-notifications"] = factory(root["React"], root["moment"], root["ReactDOM"]);
+		root["sagess-notifications"] = factory(root["React"], root["moment"], root["ReactDOM"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_687__, __WEBPACK_EXTERNAL_MODULE_689__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -31510,4 +31510,3 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])))
 });
 ;
-//# sourceMappingURL=focus-notifications.js.map

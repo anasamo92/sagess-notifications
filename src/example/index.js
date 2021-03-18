@@ -18,7 +18,7 @@ i18next.init({
         }
     }
 }, (err, t) => {
-    console.info('[FOCUS-APPLICATION] Translation initialized !');
+    console.info('[SAGESS-APPLICATION] Translation initialized !');
 });
 moment.locale('fr');
 
