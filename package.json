@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "babelify": "better-npm-run babelify",
-        "build": "better-npm-run babelify && better-npm-run copy-sass && better-npm-run bundle",
+        "build": "better-npm-run babelify && better-npm-run bundle",
         "bundle": "better-npm-run bundle",
         "copy-sass": "better-npm-run copy-sass",
         "lint": "eslint src",
