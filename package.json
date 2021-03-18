@@ -150,6 +150,6 @@
         "url-loader": "^0.5.6",
         "webpack": "1.15.0",
         "webpack-dev-server": "^1.8.2",
-        "webpack-sagess": "^1.0.6"
+        "webpack-focus": "^0.11.5"
     }
 }
