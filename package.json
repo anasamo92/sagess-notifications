@@ -1,6 +1,6 @@
 {
     "name": "sagess-notifications",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Notification Center extension for Sagess",
     "main": "index.js",
     "scripts": {
@@ -150,6 +150,6 @@
         "url-loader": "^0.5.6",
         "webpack": "1.15.0",
         "webpack-dev-server": "^1.8.2",
-        "webpack-focus": "^0.11.5"
+        "webpack-sagess": "^1.0.6"
     }
 }
