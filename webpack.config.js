@@ -1,4 +1,4 @@
-const configBuilder = require('webpack-sagess').configBuilder;
+const configBuilder = require('webpack-focus').configBuilder;
 const customConfig = {
     externals: {
         'react': 'React',
