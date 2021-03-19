@@ -1,6 +1,4 @@
-'use strict';
 
-require('./resources/fr-FR');
-
-require('./resources/en-US');
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNob3J0ZW4uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFDQTs7QUFDQSIsImZpbGUiOiJzaG9ydGVuLmpzIiwic291cmNlc0NvbnRlbnQiOlsiXHJcbmltcG9ydCAnLi9yZXNvdXJjZXMvZnItRlInO1xyXG5pbXBvcnQgJy4vcmVzb3VyY2VzL2VuLVVTJztcclxuIl19
+import './resources/fr-FR';
+import './resources/en-US';
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNob3J0ZW4uanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUNBLE9BQU8sbUJBQVA7QUFDQSxPQUFPLG1CQUFQIiwiZmlsZSI6InNob3J0ZW4uanMiLCJzb3VyY2VzQ29udGVudCI6WyJcclxuaW1wb3J0ICcuL3Jlc291cmNlcy9mci1GUic7XHJcbmltcG9ydCAnLi9yZXNvdXJjZXMvZW4tVVMnO1xyXG4iXX0=

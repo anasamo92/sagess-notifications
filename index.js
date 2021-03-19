@@ -1,46 +1,23 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = require('react-redux');
-
-var _create = require('./store/create');
-
-var _create2 = _interopRequireDefault(_create);
-
-var _notificationCenter = require('./component/notification-center');
-
-var _notificationCenter2 = _interopRequireDefault(_notificationCenter);
-
-var _config = require('./config');
-
-var _devTools = require('./container/dev-tools');
-
-var _devTools2 = _interopRequireDefault(_devTools);
-
-require('./style');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+import React, { Component, PropTypes } from 'react';
+import { Provider } from 'react-redux';
+import createStore from './store/create';
+import NotificationCenter from './component/notification-center';
+import { extendConfig, getConfig } from './config';
+import DevTools from './container/dev-tools';
 
 //Import sass files
-
+import './style';
 
 var isDev = __DEV__;
-var notificationStore = (0, _create2.default)();
+var notificationStore = createStore();
 
 function NotificationCenterDev(_ref) {
     var iconName = _ref.iconName,
@@ -49,14 +26,14 @@ function NotificationCenterDev(_ref) {
         panelFooter = _ref.panelFooter,
         panelHeader = _ref.panelHeader;
 
-    return _react2.default.createElement(
-        _reactRedux.Provider,
+    return React.createElement(
+        Provider,
         { store: store },
-        _react2.default.createElement(
+        React.createElement(
             'div',
             null,
-            _react2.default.createElement(_notificationCenter2.default, { iconName: iconName, hasAddNotif: false, onSingleClick: onSingleClick, panelHeader: panelHeader, panelFooter: panelFooter }),
-            _react2.default.createElement(_devTools2.default, null)
+            React.createElement(NotificationCenter, { iconName: iconName, hasAddNotif: false, onSingleClick: onSingleClick, panelHeader: panelHeader, panelFooter: panelFooter }),
+            React.createElement(DevTools, null)
         )
     );
 }
@@ -69,10 +46,10 @@ function NotificationCenterProd(_ref2) {
         panelFooter = _ref2.panelFooter,
         panelHeader = _ref2.panelHeader;
 
-    return _react2.default.createElement(
-        _reactRedux.Provider,
+    return React.createElement(
+        Provider,
         { store: store },
-        _react2.default.createElement(_notificationCenter2.default, { iconName: iconName, hasAddNotif: false, onSingleClick: onSingleClick, panelHeader: panelHeader, panelFooter: panelFooter })
+        React.createElement(NotificationCenter, { iconName: iconName, hasAddNotif: false, onSingleClick: onSingleClick, panelHeader: panelHeader, panelFooter: panelFooter })
     );
 }
 NotificationCenterProd.displayName = 'NotificationCenterProd';
@@ -83,44 +60,47 @@ var SmartNotificationCenter = function (_Component) {
     function SmartNotificationCenter() {
         _classCallCheck(this, SmartNotificationCenter);
 
-        return _possibleConstructorReturn(this, _Component.apply(this, arguments));
+        return _possibleConstructorReturn(this, (SmartNotificationCenter.__proto__ || Object.getPrototypeOf(SmartNotificationCenter)).apply(this, arguments));
     }
 
-    SmartNotificationCenter.prototype.componentWillMount = function componentWillMount() {
-        var config = this.props.config;
+    _createClass(SmartNotificationCenter, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            var config = this.props.config;
 
-        (0, _config.extendConfig)(config);
+            extendConfig(config);
 
-        var _getConfig = (0, _config.getConfig)(),
-            translateText = _getConfig.translateText,
-            translateDate = _getConfig.translateDate;
+            var _getConfig = getConfig(),
+                translateText = _getConfig.translateText,
+                translateDate = _getConfig.translateDate;
 
-        if (!translateText) {
-            console.error('please define a text translation function. ex: translateText: (text) => i18next.t(text)');
+            if (!translateText) {
+                console.error('please define a text translation function. ex: translateText: (text) => i18next.t(text)');
+            }
+            if (!translateDate) {
+                console.error('please define a date formatter function. ex: translateDate: (date) => moment(date).forNow()');
+            }
         }
-        if (!translateDate) {
-            console.error('please define a date formatter function. ex: translateDate: (date) => moment(date).forNow()');
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props = this.props,
+                iconName = _props.iconName,
+                panelFooter = _props.panelFooter,
+                panelHeader = _props.panelHeader;
+
+            var NotificationCenterComponent = isDev ? NotificationCenterDev : NotificationCenterProd;
+            return React.createElement(NotificationCenterComponent, { iconName: iconName, onSingleClick: this.props.onSingleClick, store: notificationStore, panelHeader: panelHeader, panelFooter: panelFooter });
         }
-    };
-
-    SmartNotificationCenter.prototype.render = function render() {
-        var _props = this.props,
-            iconName = _props.iconName,
-            panelFooter = _props.panelFooter,
-            panelHeader = _props.panelHeader;
-
-        var NotificationCenterComponent = isDev ? NotificationCenterDev : NotificationCenterProd;
-        return _react2.default.createElement(NotificationCenterComponent, { iconName: iconName, onSingleClick: this.props.onSingleClick, store: notificationStore, panelHeader: panelHeader, panelFooter: panelFooter });
-    };
+    }]);
 
     return SmartNotificationCenter;
-}(_react.Component);
+}(Component);
 
 SmartNotificationCenter.displayName = 'SmartNotificationCenter';
 SmartNotificationCenter.propTypes = {
-    config: _react.PropTypes.object,
-    iconName: _react.PropTypes.string
+    config: PropTypes.object,
+    iconName: PropTypes.string
 };
-exports.default = SmartNotificationCenter;
-module.exports = exports['default'];
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNob3J0ZW4uanMiXSwibmFtZXMiOlsiaXNEZXYiLCJfX0RFVl9fIiwibm90aWZpY2F0aW9uU3RvcmUiLCJOb3RpZmljYXRpb25DZW50ZXJEZXYiLCJpY29uTmFtZSIsIm9uU2luZ2xlQ2xpY2siLCJzdG9yZSIsInBhbmVsRm9vdGVyIiwicGFuZWxIZWFkZXIiLCJkaXNwbGF5TmFtZSIsIk5vdGlmaWNhdGlvbkNlbnRlclByb2QiLCJTbWFydE5vdGlmaWNhdGlvbkNlbnRlciIsImNvbXBvbmVudFdpbGxNb3VudCIsImNvbmZpZyIsInByb3BzIiwidHJhbnNsYXRlVGV4dCIsInRyYW5zbGF0ZURhdGUiLCJjb25zb2xlIiwiZXJyb3IiLCJyZW5kZXIiLCJOb3RpZmljYXRpb25DZW50ZXJDb21wb25lbnQiLCJwcm9wVHlwZXMiLCJvYmplY3QiLCJzdHJpbmciXSwibWFwcGluZ3MiOiI7Ozs7OztBQUFBOzs7O0FBQ0E7O0FBQ0E7Ozs7QUFDQTs7OztBQUNBOztBQUNBOzs7O0FBR0E7Ozs7Ozs7Ozs7OztBQURBOzs7QUFHQSxJQUFNQSxRQUFRQyxPQUFkO0FBQ0EsSUFBTUMsb0JBQW9CLHVCQUExQjs7QUFFQSxTQUFTQyxxQkFBVCxPQUEyRjtBQUFBLFFBQTNEQyxRQUEyRCxRQUEzREEsUUFBMkQ7QUFBQSxRQUFqREMsYUFBaUQsUUFBakRBLGFBQWlEO0FBQUEsUUFBbENDLEtBQWtDLFFBQWxDQSxLQUFrQztBQUFBLFFBQTNCQyxXQUEyQixRQUEzQkEsV0FBMkI7QUFBQSxRQUFkQyxXQUFjLFFBQWRBLFdBQWM7O0FBQ3ZGLFdBQ0k7QUFBQTtBQUFBLFVBQVUsT0FBT0YsS0FBakI7QUFDSTtBQUFBO0FBQUE7QUFDSSwwRUFBb0IsVUFBVUYsUUFBOUIsRUFBd0MsYUFBYSxLQUFyRCxFQUE0RCxlQUFlQyxhQUEzRSxFQUEwRixhQUFhRyxXQUF2RyxFQUFvSCxhQUFhRCxXQUFqSSxHQURKO0FBRUk7QUFGSjtBQURKLEtBREo7QUFRSDtBQUNESixzQkFBc0JNLFdBQXRCLEdBQW9DLHVCQUFwQzs7QUFJQSxTQUFTQyxzQkFBVCxRQUE0RjtBQUFBLFFBQTNETixRQUEyRCxTQUEzREEsUUFBMkQ7QUFBQSxRQUFqREMsYUFBaUQsU0FBakRBLGFBQWlEO0FBQUEsUUFBbENDLEtBQWtDLFNBQWxDQSxLQUFrQztBQUFBLFFBQTNCQyxXQUEyQixTQUEzQkEsV0FBMkI7QUFBQSxRQUFkQyxXQUFjLFNBQWRBLFdBQWM7O0FBQ3hGLFdBQ0k7QUFBQTtBQUFBLFVBQVUsT0FBT0YsS0FBakI7QUFDSSxzRUFBb0IsVUFBVUYsUUFBOUIsRUFBd0MsYUFBYSxLQUFyRCxFQUE0RCxlQUFlQyxhQUEzRSxFQUEwRixhQUFhRyxXQUF2RyxFQUFvSCxhQUFhRCxXQUFqSTtBQURKLEtBREo7QUFLSDtBQUNERyx1QkFBdUJELFdBQXZCLEdBQXFDLHdCQUFyQzs7SUFJTUUsdUI7Ozs7Ozs7OztzQ0FDRkMsa0IsaUNBQXFCO0FBQUEsWUFDVkMsTUFEVSxHQUNBLEtBQUtDLEtBREwsQ0FDVkQsTUFEVTs7QUFFakIsa0NBQWFBLE1BQWI7O0FBRmlCLHlCQUdzQix3QkFIdEI7QUFBQSxZQUdWRSxhQUhVLGNBR1ZBLGFBSFU7QUFBQSxZQUdLQyxhQUhMLGNBR0tBLGFBSEw7O0FBSWpCLFlBQUcsQ0FBQ0QsYUFBSixFQUFtQjtBQUNmRSxvQkFBUUMsS0FBUixDQUFjLHlGQUFkO0FBQ0g7QUFDRCxZQUFHLENBQUNGLGFBQUosRUFBbUI7QUFDZkMsb0JBQVFDLEtBQVIsQ0FBYyw2RkFBZDtBQUNIO0FBQ0osSzs7c0NBQ0RDLE0scUJBQVM7QUFBQSxxQkFDd0MsS0FBS0wsS0FEN0M7QUFBQSxZQUNFVixRQURGLFVBQ0VBLFFBREY7QUFBQSxZQUNZRyxXQURaLFVBQ1lBLFdBRFo7QUFBQSxZQUN5QkMsV0FEekIsVUFDeUJBLFdBRHpCOztBQUVMLFlBQU1ZLDhCQUE4QnBCLFFBQVFHLHFCQUFSLEdBQWdDTyxzQkFBcEU7QUFDQSxlQUFPLDhCQUFDLDJCQUFELElBQTZCLFVBQVVOLFFBQXZDLEVBQWlELGVBQWUsS0FBS1UsS0FBTCxDQUFXVCxhQUEzRSxFQUEwRixPQUFPSCxpQkFBakcsRUFBb0gsYUFBYU0sV0FBakksRUFBOEksYUFBYUQsV0FBM0osR0FBUDtBQUNILEs7Ozs7O0FBRUxJLHdCQUF3QkYsV0FBeEIsR0FBc0MseUJBQXRDO0FBQ0FFLHdCQUF3QlUsU0FBeEIsR0FBb0M7QUFDaENSLFlBQVEsaUJBQVVTLE1BRGM7QUFFaENsQixjQUFVLGlCQUFVbUI7QUFGWSxDQUFwQztrQkFJZVosdUIiLCJmaWxlIjoic2hvcnRlbi5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCAsIHsgQ29tcG9uZW50ICwgUHJvcFR5cGVzIH1mcm9tICdyZWFjdCc7XHJcbmltcG9ydCB7IFByb3ZpZGVyIH0gZnJvbSAncmVhY3QtcmVkdXgnO1xyXG5pbXBvcnQgY3JlYXRlU3RvcmUgZnJvbSAnLi9zdG9yZS9jcmVhdGUnO1xyXG5pbXBvcnQgTm90aWZpY2F0aW9uQ2VudGVyIGZyb20gJy4vY29tcG9uZW50L25vdGlmaWNhdGlvbi1jZW50ZXInO1xyXG5pbXBvcnQge2V4dGVuZENvbmZpZywgZ2V0Q29uZmlnfSBmcm9tICcuL2NvbmZpZyc7XHJcbmltcG9ydCBEZXZUb29scyBmcm9tICcuL2NvbnRhaW5lci9kZXYtdG9vbHMnO1xyXG5cclxuLy9JbXBvcnQgc2FzcyBmaWxlc1xyXG5pbXBvcnQgJy4vc3R5bGUnO1xyXG5cclxuY29uc3QgaXNEZXYgPSBfX0RFVl9fO1xyXG5jb25zdCBub3RpZmljYXRpb25TdG9yZSA9IGNyZWF0ZVN0b3JlKCk7XHJcblxyXG5mdW5jdGlvbiBOb3RpZmljYXRpb25DZW50ZXJEZXYoe2ljb25OYW1lLCBvblNpbmdsZUNsaWNrLCBzdG9yZSwgcGFuZWxGb290ZXIsIHBhbmVsSGVhZGVyfSkge1xyXG4gICAgcmV0dXJuIChcclxuICAgICAgICA8UHJvdmlkZXIgc3RvcmU9e3N0b3JlfT5cclxuICAgICAgICAgICAgPGRpdj5cclxuICAgICAgICAgICAgICAgIDxOb3RpZmljYXRpb25DZW50ZXIgaWNvbk5hbWU9e2ljb25OYW1lfSBoYXNBZGROb3RpZj17ZmFsc2V9IG9uU2luZ2xlQ2xpY2s9e29uU2luZ2xlQ2xpY2t9IHBhbmVsSGVhZGVyPXtwYW5lbEhlYWRlcn0gcGFuZWxGb290ZXI9e3BhbmVsRm9vdGVyfS8+XHJcbiAgICAgICAgICAgICAgICA8RGV2VG9vbHMvPlxyXG4gICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICA8L1Byb3ZpZGVyPlxyXG4gICAgKTtcclxufVxyXG5Ob3RpZmljYXRpb25DZW50ZXJEZXYuZGlzcGxheU5hbWUgPSAnTm90aWZpY2F0aW9uQ2VudGVyRGV2JztcclxuXHJcblxyXG5cclxuZnVuY3Rpb24gTm90aWZpY2F0aW9uQ2VudGVyUHJvZCh7aWNvbk5hbWUsIG9uU2luZ2xlQ2xpY2ssIHN0b3JlLCBwYW5lbEZvb3RlciwgcGFuZWxIZWFkZXJ9KSB7XHJcbiAgICByZXR1cm4gKFxyXG4gICAgICAgIDxQcm92aWRlciBzdG9yZT17c3RvcmV9PlxyXG4gICAgICAgICAgICA8Tm90aWZpY2F0aW9uQ2VudGVyIGljb25OYW1lPXtpY29uTmFtZX0gaGFzQWRkTm90aWY9e2ZhbHNlfSBvblNpbmdsZUNsaWNrPXtvblNpbmdsZUNsaWNrfSBwYW5lbEhlYWRlcj17cGFuZWxIZWFkZXJ9IHBhbmVsRm9vdGVyPXtwYW5lbEZvb3Rlcn0gLz5cclxuICAgICAgICA8L1Byb3ZpZGVyPlxyXG4gICAgKTtcclxufVxyXG5Ob3RpZmljYXRpb25DZW50ZXJQcm9kLmRpc3BsYXlOYW1lID0gJ05vdGlmaWNhdGlvbkNlbnRlclByb2QnO1xyXG5cclxuXHJcblxyXG5jbGFzcyBTbWFydE5vdGlmaWNhdGlvbkNlbnRlciBleHRlbmRzIENvbXBvbmVudCB7XHJcbiAgICBjb21wb25lbnRXaWxsTW91bnQoKSB7XHJcbiAgICAgICAgY29uc3Qge2NvbmZpZ30gPSB0aGlzLnByb3BzO1xyXG4gICAgICAgIGV4dGVuZENvbmZpZyhjb25maWcpO1xyXG4gICAgICAgIGNvbnN0IHt0cmFuc2xhdGVUZXh0LCB0cmFuc2xhdGVEYXRlfSA9IGdldENvbmZpZygpO1xyXG4gICAgICAgIGlmKCF0cmFuc2xhdGVUZXh0KSB7XHJcbiAgICAgICAgICAgIGNvbnNvbGUuZXJyb3IoJ3BsZWFzZSBkZWZpbmUgYSB0ZXh0IHRyYW5zbGF0aW9uIGZ1bmN0aW9uLiBleDogdHJhbnNsYXRlVGV4dDogKHRleHQpID0+IGkxOG5leHQudCh0ZXh0KScpO1xyXG4gICAgICAgIH1cclxuICAgICAgICBpZighdHJhbnNsYXRlRGF0ZSkge1xyXG4gICAgICAgICAgICBjb25zb2xlLmVycm9yKCdwbGVhc2UgZGVmaW5lIGEgZGF0ZSBmb3JtYXR0ZXIgZnVuY3Rpb24uIGV4OiB0cmFuc2xhdGVEYXRlOiAoZGF0ZSkgPT4gbW9tZW50KGRhdGUpLmZvck5vdygpJyk7XHJcbiAgICAgICAgfVxyXG4gICAgfVxyXG4gICAgcmVuZGVyKCkge1xyXG4gICAgICAgIGNvbnN0IHtpY29uTmFtZSwgcGFuZWxGb290ZXIsIHBhbmVsSGVhZGVyfSA9IHRoaXMucHJvcHM7XHJcbiAgICAgICAgY29uc3QgTm90aWZpY2F0aW9uQ2VudGVyQ29tcG9uZW50ID0gaXNEZXYgPyBOb3RpZmljYXRpb25DZW50ZXJEZXYgOiBOb3RpZmljYXRpb25DZW50ZXJQcm9kO1xyXG4gICAgICAgIHJldHVybiA8Tm90aWZpY2F0aW9uQ2VudGVyQ29tcG9uZW50IGljb25OYW1lPXtpY29uTmFtZX0gb25TaW5nbGVDbGljaz17dGhpcy5wcm9wcy5vblNpbmdsZUNsaWNrfSBzdG9yZT17bm90aWZpY2F0aW9uU3RvcmV9IHBhbmVsSGVhZGVyPXtwYW5lbEhlYWRlcn0gcGFuZWxGb290ZXI9e3BhbmVsRm9vdGVyfS8+XHJcbiAgICB9XHJcbn1cclxuU21hcnROb3RpZmljYXRpb25DZW50ZXIuZGlzcGxheU5hbWUgPSAnU21hcnROb3RpZmljYXRpb25DZW50ZXInO1xyXG5TbWFydE5vdGlmaWNhdGlvbkNlbnRlci5wcm9wVHlwZXMgPSB7XHJcbiAgICBjb25maWc6IFByb3BUeXBlcy5vYmplY3QsXHJcbiAgICBpY29uTmFtZTogUHJvcFR5cGVzLnN0cmluZ1xyXG59O1xyXG5leHBvcnQgZGVmYXVsdCBTbWFydE5vdGlmaWNhdGlvbkNlbnRlcjtcclxuIl19
+export default SmartNotificationCenter;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNob3J0ZW4uanMiXSwibmFtZXMiOlsiUmVhY3QiLCJDb21wb25lbnQiLCJQcm9wVHlwZXMiLCJQcm92aWRlciIsImNyZWF0ZVN0b3JlIiwiTm90aWZpY2F0aW9uQ2VudGVyIiwiZXh0ZW5kQ29uZmlnIiwiZ2V0Q29uZmlnIiwiRGV2VG9vbHMiLCJpc0RldiIsIl9fREVWX18iLCJub3RpZmljYXRpb25TdG9yZSIsIk5vdGlmaWNhdGlvbkNlbnRlckRldiIsImljb25OYW1lIiwib25TaW5nbGVDbGljayIsInN0b3JlIiwicGFuZWxGb290ZXIiLCJwYW5lbEhlYWRlciIsImRpc3BsYXlOYW1lIiwiTm90aWZpY2F0aW9uQ2VudGVyUHJvZCIsIlNtYXJ0Tm90aWZpY2F0aW9uQ2VudGVyIiwiY29uZmlnIiwicHJvcHMiLCJ0cmFuc2xhdGVUZXh0IiwidHJhbnNsYXRlRGF0ZSIsImNvbnNvbGUiLCJlcnJvciIsIk5vdGlmaWNhdGlvbkNlbnRlckNvbXBvbmVudCIsInByb3BUeXBlcyIsIm9iamVjdCIsInN0cmluZyJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBQSxPQUFPQSxLQUFQLElBQWlCQyxTQUFqQixFQUE2QkMsU0FBN0IsUUFBNkMsT0FBN0M7QUFDQSxTQUFTQyxRQUFULFFBQXlCLGFBQXpCO0FBQ0EsT0FBT0MsV0FBUCxNQUF3QixnQkFBeEI7QUFDQSxPQUFPQyxrQkFBUCxNQUErQixpQ0FBL0I7QUFDQSxTQUFRQyxZQUFSLEVBQXNCQyxTQUF0QixRQUFzQyxVQUF0QztBQUNBLE9BQU9DLFFBQVAsTUFBcUIsdUJBQXJCOztBQUVBO0FBQ0EsT0FBTyxTQUFQOztBQUVBLElBQU1DLFFBQVFDLE9BQWQ7QUFDQSxJQUFNQyxvQkFBb0JQLGFBQTFCOztBQUVBLFNBQVNRLHFCQUFULE9BQTJGO0FBQUEsUUFBM0RDLFFBQTJELFFBQTNEQSxRQUEyRDtBQUFBLFFBQWpEQyxhQUFpRCxRQUFqREEsYUFBaUQ7QUFBQSxRQUFsQ0MsS0FBa0MsUUFBbENBLEtBQWtDO0FBQUEsUUFBM0JDLFdBQTJCLFFBQTNCQSxXQUEyQjtBQUFBLFFBQWRDLFdBQWMsUUFBZEEsV0FBYzs7QUFDdkYsV0FDSTtBQUFDLGdCQUFEO0FBQUEsVUFBVSxPQUFPRixLQUFqQjtBQUNJO0FBQUE7QUFBQTtBQUNJLGdDQUFDLGtCQUFELElBQW9CLFVBQVVGLFFBQTlCLEVBQXdDLGFBQWEsS0FBckQsRUFBNEQsZUFBZUMsYUFBM0UsRUFBMEYsYUFBYUcsV0FBdkcsRUFBb0gsYUFBYUQsV0FBakksR0FESjtBQUVJLGdDQUFDLFFBQUQ7QUFGSjtBQURKLEtBREo7QUFRSDtBQUNESixzQkFBc0JNLFdBQXRCLEdBQW9DLHVCQUFwQzs7QUFJQSxTQUFTQyxzQkFBVCxRQUE0RjtBQUFBLFFBQTNETixRQUEyRCxTQUEzREEsUUFBMkQ7QUFBQSxRQUFqREMsYUFBaUQsU0FBakRBLGFBQWlEO0FBQUEsUUFBbENDLEtBQWtDLFNBQWxDQSxLQUFrQztBQUFBLFFBQTNCQyxXQUEyQixTQUEzQkEsV0FBMkI7QUFBQSxRQUFkQyxXQUFjLFNBQWRBLFdBQWM7O0FBQ3hGLFdBQ0k7QUFBQyxnQkFBRDtBQUFBLFVBQVUsT0FBT0YsS0FBakI7QUFDSSw0QkFBQyxrQkFBRCxJQUFvQixVQUFVRixRQUE5QixFQUF3QyxhQUFhLEtBQXJELEVBQTRELGVBQWVDLGFBQTNFLEVBQTBGLGFBQWFHLFdBQXZHLEVBQW9ILGFBQWFELFdBQWpJO0FBREosS0FESjtBQUtIO0FBQ0RHLHVCQUF1QkQsV0FBdkIsR0FBcUMsd0JBQXJDOztJQUlNRSx1Qjs7Ozs7Ozs7Ozs7NkNBQ21CO0FBQUEsZ0JBQ1ZDLE1BRFUsR0FDQSxLQUFLQyxLQURMLENBQ1ZELE1BRFU7O0FBRWpCZix5QkFBYWUsTUFBYjs7QUFGaUIsNkJBR3NCZCxXQUh0QjtBQUFBLGdCQUdWZ0IsYUFIVSxjQUdWQSxhQUhVO0FBQUEsZ0JBR0tDLGFBSEwsY0FHS0EsYUFITDs7QUFJakIsZ0JBQUcsQ0FBQ0QsYUFBSixFQUFtQjtBQUNmRSx3QkFBUUMsS0FBUixDQUFjLHlGQUFkO0FBQ0g7QUFDRCxnQkFBRyxDQUFDRixhQUFKLEVBQW1CO0FBQ2ZDLHdCQUFRQyxLQUFSLENBQWMsNkZBQWQ7QUFDSDtBQUNKOzs7aUNBQ1E7QUFBQSx5QkFDd0MsS0FBS0osS0FEN0M7QUFBQSxnQkFDRVQsUUFERixVQUNFQSxRQURGO0FBQUEsZ0JBQ1lHLFdBRFosVUFDWUEsV0FEWjtBQUFBLGdCQUN5QkMsV0FEekIsVUFDeUJBLFdBRHpCOztBQUVMLGdCQUFNVSw4QkFBOEJsQixRQUFRRyxxQkFBUixHQUFnQ08sc0JBQXBFO0FBQ0EsbUJBQU8sb0JBQUMsMkJBQUQsSUFBNkIsVUFBVU4sUUFBdkMsRUFBaUQsZUFBZSxLQUFLUyxLQUFMLENBQVdSLGFBQTNFLEVBQTBGLE9BQU9ILGlCQUFqRyxFQUFvSCxhQUFhTSxXQUFqSSxFQUE4SSxhQUFhRCxXQUEzSixHQUFQO0FBQ0g7Ozs7RUFoQmlDZixTOztBQWtCdENtQix3QkFBd0JGLFdBQXhCLEdBQXNDLHlCQUF0QztBQUNBRSx3QkFBd0JRLFNBQXhCLEdBQW9DO0FBQ2hDUCxZQUFRbkIsVUFBVTJCLE1BRGM7QUFFaENoQixjQUFVWCxVQUFVNEI7QUFGWSxDQUFwQztBQUlBLGVBQWVWLHVCQUFmIiwiZmlsZSI6InNob3J0ZW4uanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgLCB7IENvbXBvbmVudCAsIFByb3BUeXBlcyB9ZnJvbSAncmVhY3QnO1xyXG5pbXBvcnQgeyBQcm92aWRlciB9IGZyb20gJ3JlYWN0LXJlZHV4JztcclxuaW1wb3J0IGNyZWF0ZVN0b3JlIGZyb20gJy4vc3RvcmUvY3JlYXRlJztcclxuaW1wb3J0IE5vdGlmaWNhdGlvbkNlbnRlciBmcm9tICcuL2NvbXBvbmVudC9ub3RpZmljYXRpb24tY2VudGVyJztcclxuaW1wb3J0IHtleHRlbmRDb25maWcsIGdldENvbmZpZ30gZnJvbSAnLi9jb25maWcnO1xyXG5pbXBvcnQgRGV2VG9vbHMgZnJvbSAnLi9jb250YWluZXIvZGV2LXRvb2xzJztcclxuXHJcbi8vSW1wb3J0IHNhc3MgZmlsZXNcclxuaW1wb3J0ICcuL3N0eWxlJztcclxuXHJcbmNvbnN0IGlzRGV2ID0gX19ERVZfXztcclxuY29uc3Qgbm90aWZpY2F0aW9uU3RvcmUgPSBjcmVhdGVTdG9yZSgpO1xyXG5cclxuZnVuY3Rpb24gTm90aWZpY2F0aW9uQ2VudGVyRGV2KHtpY29uTmFtZSwgb25TaW5nbGVDbGljaywgc3RvcmUsIHBhbmVsRm9vdGVyLCBwYW5lbEhlYWRlcn0pIHtcclxuICAgIHJldHVybiAoXHJcbiAgICAgICAgPFByb3ZpZGVyIHN0b3JlPXtzdG9yZX0+XHJcbiAgICAgICAgICAgIDxkaXY+XHJcbiAgICAgICAgICAgICAgICA8Tm90aWZpY2F0aW9uQ2VudGVyIGljb25OYW1lPXtpY29uTmFtZX0gaGFzQWRkTm90aWY9e2ZhbHNlfSBvblNpbmdsZUNsaWNrPXtvblNpbmdsZUNsaWNrfSBwYW5lbEhlYWRlcj17cGFuZWxIZWFkZXJ9IHBhbmVsRm9vdGVyPXtwYW5lbEZvb3Rlcn0vPlxyXG4gICAgICAgICAgICAgICAgPERldlRvb2xzLz5cclxuICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgPC9Qcm92aWRlcj5cclxuICAgICk7XHJcbn1cclxuTm90aWZpY2F0aW9uQ2VudGVyRGV2LmRpc3BsYXlOYW1lID0gJ05vdGlmaWNhdGlvbkNlbnRlckRldic7XHJcblxyXG5cclxuXHJcbmZ1bmN0aW9uIE5vdGlmaWNhdGlvbkNlbnRlclByb2Qoe2ljb25OYW1lLCBvblNpbmdsZUNsaWNrLCBzdG9yZSwgcGFuZWxGb290ZXIsIHBhbmVsSGVhZGVyfSkge1xyXG4gICAgcmV0dXJuIChcclxuICAgICAgICA8UHJvdmlkZXIgc3RvcmU9e3N0b3JlfT5cclxuICAgICAgICAgICAgPE5vdGlmaWNhdGlvbkNlbnRlciBpY29uTmFtZT17aWNvbk5hbWV9IGhhc0FkZE5vdGlmPXtmYWxzZX0gb25TaW5nbGVDbGljaz17b25TaW5nbGVDbGlja30gcGFuZWxIZWFkZXI9e3BhbmVsSGVhZGVyfSBwYW5lbEZvb3Rlcj17cGFuZWxGb290ZXJ9IC8+XHJcbiAgICAgICAgPC9Qcm92aWRlcj5cclxuICAgICk7XHJcbn1cclxuTm90aWZpY2F0aW9uQ2VudGVyUHJvZC5kaXNwbGF5TmFtZSA9ICdOb3RpZmljYXRpb25DZW50ZXJQcm9kJztcclxuXHJcblxyXG5cclxuY2xhc3MgU21hcnROb3RpZmljYXRpb25DZW50ZXIgZXh0ZW5kcyBDb21wb25lbnQge1xyXG4gICAgY29tcG9uZW50V2lsbE1vdW50KCkge1xyXG4gICAgICAgIGNvbnN0IHtjb25maWd9ID0gdGhpcy5wcm9wcztcclxuICAgICAgICBleHRlbmRDb25maWcoY29uZmlnKTtcclxuICAgICAgICBjb25zdCB7dHJhbnNsYXRlVGV4dCwgdHJhbnNsYXRlRGF0ZX0gPSBnZXRDb25maWcoKTtcclxuICAgICAgICBpZighdHJhbnNsYXRlVGV4dCkge1xyXG4gICAgICAgICAgICBjb25zb2xlLmVycm9yKCdwbGVhc2UgZGVmaW5lIGEgdGV4dCB0cmFuc2xhdGlvbiBmdW5jdGlvbi4gZXg6IHRyYW5zbGF0ZVRleHQ6ICh0ZXh0KSA9PiBpMThuZXh0LnQodGV4dCknKTtcclxuICAgICAgICB9XHJcbiAgICAgICAgaWYoIXRyYW5zbGF0ZURhdGUpIHtcclxuICAgICAgICAgICAgY29uc29sZS5lcnJvcigncGxlYXNlIGRlZmluZSBhIGRhdGUgZm9ybWF0dGVyIGZ1bmN0aW9uLiBleDogdHJhbnNsYXRlRGF0ZTogKGRhdGUpID0+IG1vbWVudChkYXRlKS5mb3JOb3coKScpO1xyXG4gICAgICAgIH1cclxuICAgIH1cclxuICAgIHJlbmRlcigpIHtcclxuICAgICAgICBjb25zdCB7aWNvbk5hbWUsIHBhbmVsRm9vdGVyLCBwYW5lbEhlYWRlcn0gPSB0aGlzLnByb3BzO1xyXG4gICAgICAgIGNvbnN0IE5vdGlmaWNhdGlvbkNlbnRlckNvbXBvbmVudCA9IGlzRGV2ID8gTm90aWZpY2F0aW9uQ2VudGVyRGV2IDogTm90aWZpY2F0aW9uQ2VudGVyUHJvZDtcclxuICAgICAgICByZXR1cm4gPE5vdGlmaWNhdGlvbkNlbnRlckNvbXBvbmVudCBpY29uTmFtZT17aWNvbk5hbWV9IG9uU2luZ2xlQ2xpY2s9e3RoaXMucHJvcHMub25TaW5nbGVDbGlja30gc3RvcmU9e25vdGlmaWNhdGlvblN0b3JlfSBwYW5lbEhlYWRlcj17cGFuZWxIZWFkZXJ9IHBhbmVsRm9vdGVyPXtwYW5lbEZvb3Rlcn0vPlxyXG4gICAgfVxyXG59XHJcblNtYXJ0Tm90aWZpY2F0aW9uQ2VudGVyLmRpc3BsYXlOYW1lID0gJ1NtYXJ0Tm90aWZpY2F0aW9uQ2VudGVyJztcclxuU21hcnROb3RpZmljYXRpb25DZW50ZXIucHJvcFR5cGVzID0ge1xyXG4gICAgY29uZmlnOiBQcm9wVHlwZXMub2JqZWN0LFxyXG4gICAgaWNvbk5hbWU6IFByb3BUeXBlcy5zdHJpbmdcclxufTtcclxuZXhwb3J0IGRlZmF1bHQgU21hcnROb3RpZmljYXRpb25DZW50ZXI7XHJcbiJdfQ==

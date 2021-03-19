@@ -6,7 +6,7 @@ const faker = require('faker');
 const moment = require('moment');
 
 const webpackConfig = require('./webpack.config');
-const serverLauncher = require('webpack-focus').serverLauncher;
+const serverLauncher = require('webpack-sagess').serverLauncher;
 
 const NB_GENERATED_NOTIF = 10;
 let notificationsJSON = [];//require('./api-mock/notifs.json');
